@@ -518,7 +518,152 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
     #WHERE number IS NOT NULL;
     ```
 
+
+
+- **원하는 데이터 만들기 (정렬)**
+
+  - 정렬하기
+
+    ```mysql
+    SELECT name
+    FROM mypokemon
+    ORDER BY number DESC;	# 내림차순(DESC), 오름차순(ASC) 정렬
+    
+    # 두개의 칼럼순으로 정렬
+    SELECT number, name, attack, defense
+    FROM mypokemon
+    ORDER BY attack DESC,defense;	
+    # attack를 기준으로 내림차순으로 정렬, attack의 값이 같을 경우 defense의 오름차순으로 정렬
+    
+    SELECT number, name, attack, defense
+    FROM mypokemon
+    ORDER BY 3 DESC, 4;
+    # 1: number, 2: name, 3: attack, 4: defense
+    # SELECT의 순서에 따라 번호가 매겨짐
+    ```
+
     
 
+  - 순위 만들기
+
+    ```mysql
+    # RANK는 항상 ORDER BY와 쓰인다.
+    SELECT name,attack,
+    RANK() OVER (ORDER BY attack DESC) AS attack_rank
+    FROM pokemon.mypokemon;
+    # attack_rank라는 새로운 칼럼으로 순위를 보여준다. 
+    
+    
+    ```
+
+    - RANK, DENSE_RANK, ROW_NUMBER 차이점
+
+    <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108011408587.png" alt="image-20220108011408587" style="zoom:67%;" />
+
   
+
+  - 함수의 사용
+
+    - **문자형 데이터 함수**
+
+      괄호 안에 칼럼명을 넣어서 사용하기도 한다. 
+
+      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108011655297.png" alt="image-20220108011655297" style="zoom:67%;" />
+
+    - LOCATE
+
+      1. 문자가 여러개라면 가장 앞의 문자의 위치를 가져온다.
+      2. 찾는 문자가 없는 경우 0을 가져온다.
+
+      ```mysql
+      SELECT 칼럼명, LOCATE('찾는 문자',칼럼명)
+      FROM 데이터베이스명.테이블명;
+      ```
+
+      
+
+    - SUBSTRING
+
+      1. 만약 입력한 숫자가 문자열 길이보다 크면 아무것도 가져오지 않는다.
+
+      ```mysql
+      SELECT 칼럼명, SUBSTRING(칼럼명,3)
+      FROM 데이터베이스명.테이블명;
+      ```
+
+    - RIGHT, LEFT
+
+      ```mysql
+      SELECT 칼럼명, RIGHT(칼럼명,3), LEFT(칼럼명,3)
+      FROM 데이터베이스명.테이블명;
+      ```
+
+    - CONCAT
+
+      ```mysql
+      SELECT 칼럼명, CONCAT(LEFT(칼럼명,1),RIGHT(칼럼명,1)) AS 새로운 칼럼명
+      FROM 데이터베이스명.테이블명;
+      # 이런식으로 같이 쓰기도 한다. 
+      ```
+
+      
+
+    - **숫자형 데이터 함수**
+
+      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108012708540.png" alt="image-20220108012708540" style="zoom:67%;" />
+
+    - **날짜형 데이터 함수**
+
+      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108013035233.png" alt="image-20220108013035233" style="zoom: 67%;" />
+
+      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108013254100.png" alt="image-20220108013254100" style="zoom:67%;" />
+
+      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108013341870.png" alt="image-20220108013341870" style="zoom:67%;" />
+
+      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108013656439.png" alt="image-20220108013656439" style="zoom:67%;" />
+
+      - DATE_FORMAT
+
+      ```mysql
+      SELECT DATE_FORMAT('1996-11-06 17:34:58','%Y년 %m월 %d일 %H시 %i분 %s초') AS formatted_date;
+      ```
+
+      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108013601164.png" alt="image-20220108013601164" style="zoom:67%;" />
+
+  - **실습**
+
+    ```mysql
+    DROP DATABASE IF EXISTS pokemon;
+    CREATE DATABASE pokemon;
+    USE pokemon;
+    CREATE TABLE mypokemon (
+    number INT,
+    name VARCHAR(20),
+    type VARCHAR(10),
+    attack INT,
+    defense INT,
+    capture_date DATE
+    );
+    INSERT INTO mypokemon (number, name, type, attack, defense, capture_date)
+    VALUES (10, 'caterpie', 'bug', 30, 35, '2019-10-14'),
+    (25, 'pikachu', 'electric', 55, 40, '2018-11-04'),
+    (26, 'raichu', 'electric', 90, 55, '2019-05-28'),
+    (125, 'electabuzz', 'electric', 83, 57, '2020-12-29'),
+    (133, 'eevee', 'normal', 55, 50, '2021-10-03'),
+    (137, 'porygon', 'normal', 60, 70, '2021-01-16'),
+    (152, 'chikoirita', 'grass', 49, 65, '2020-03-05'),
+    (153, 'bayleef', 'grass', 62, 80, '2022-01-01');
+    
+    SELECT name, defense, RANK() OVER(ORDER BY defense DESC) AS defense_rank
+    FROM mypokemon;
+    
+    SELECT name, DATEDIFF('2022-02-14',capture_date) AS days
+    FROM mypokemon;
+    ```
+
+    
+
+
+
+ 
 
