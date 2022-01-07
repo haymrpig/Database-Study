@@ -81,7 +81,7 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
 
 파일 시스템을 사용했을 경우의 문제점을 해결하기 위한 방법으로 응용프로그램과 데이터 연결을 도와주며 **데이터 관리와 데이터에 대한 기본 처리를 담당**하는 추가적인 소프트웨어이다. 
 
-<img src="C:\Users\Administrator1\AppData\Roaming\Typora\typora-user-images\image-20220106230124653.png" alt="image-20220106230124653" style="zoom:67%;" />
+![image](https://user-images.githubusercontent.com/71866756/148538150-cb2c1431-792c-4cf8-9703-c3a78ecc4940.png)
 
 
 
