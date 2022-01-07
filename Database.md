@@ -4,8 +4,8 @@
 - [데이터베이스의 특징](#데이터베이스의-특징)
 - [데이터의 유형](#데이터의-유형)
 - [파일 시스템을 사용했을 경우의 문제점](#파일-시스템을-사용했을-경우의-문제점)
-- [DBMS (Database management system)의 필요성](#DBMS-Database-management-system-의-필요성)
-- [MySQL 정리](#MySQL-정리)
+- [DBMS (Database management system)의 필요성](#데이터베이스-관리시스템dbms의-필요성)
+- [MySQL 정리](#mysql-정리)
 
 # 데이터베이스의 정의
 
