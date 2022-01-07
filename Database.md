@@ -558,7 +558,7 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
 
     - RANK, DENSE_RANK, ROW_NUMBER 차이점
 
-    <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108011408587.png" alt="image-20220108011408587" style="zoom:67%;" />
+    ![image](https://user-images.githubusercontent.com/71866756/148578318-0a125a8d-b6b9-4994-9985-b059b51827a0.png)
 
   
 
@@ -568,7 +568,7 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
 
       괄호 안에 칼럼명을 넣어서 사용하기도 한다. 
 
-      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108011655297.png" alt="image-20220108011655297" style="zoom:67%;" />
+      ![image](https://user-images.githubusercontent.com/71866756/148578359-a570ea89-4c02-4a11-9c8b-784129927f33.png)
 
     - LOCATE
 
@@ -610,17 +610,11 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
 
     - **숫자형 데이터 함수**
 
-      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108012708540.png" alt="image-20220108012708540" style="zoom:67%;" />
+      ![image](https://user-images.githubusercontent.com/71866756/148578405-50b9c488-1a67-4947-ab95-351ad945e45c.png)
 
     - **날짜형 데이터 함수**
 
-      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108013035233.png" alt="image-20220108013035233" style="zoom: 67%;" />
-
-      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108013254100.png" alt="image-20220108013254100" style="zoom:67%;" />
-
-      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108013341870.png" alt="image-20220108013341870" style="zoom:67%;" />
-
-      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108013656439.png" alt="image-20220108013656439" style="zoom:67%;" />
+      ![image](https://user-images.githubusercontent.com/71866756/148578466-77eed0f4-12d4-4267-9ca5-24a6fc51bb9a.png)
 
       - DATE_FORMAT
 
@@ -628,7 +622,7 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
       SELECT DATE_FORMAT('1996-11-06 17:34:58','%Y년 %m월 %d일 %H시 %i분 %s초') AS formatted_date;
       ```
 
-      <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220108013601164.png" alt="image-20220108013601164" style="zoom:67%;" />
+      ![image](https://user-images.githubusercontent.com/71866756/148578533-2f82adb5-8bb2-42d4-8561-95be6d65ad38.png)
 
   - **실습**
 
