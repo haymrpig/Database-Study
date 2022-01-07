@@ -189,17 +189,17 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
 
   - 정수형
 
-    <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220107203754897.png" alt="image-20220107203754897" style="zoom:67%;" />
+    ![image](https://user-images.githubusercontent.com/71866756/148562610-c5270eb1-8ce4-48f5-8bfb-4df17c1660dc.png)
 
   - 실수형
 
-    <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220107203737076.png" alt="image-20220107203737076" style="zoom:67%;" />
+    ![image](https://user-images.githubusercontent.com/71866756/148562677-ce8afcbb-7a2e-41b2-a07e-00768521536b.png)
 
   - 문자형
 
     다른 데이터 타입과 다르게 (n)으로 몇 바이트인지 지정해준다. 
 
-    <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220107203836347.png" alt="image-20220107203836347" style="zoom:67%;" />
+    ![image](https://user-images.githubusercontent.com/71866756/148562717-81ea8697-a5c1-455e-85fc-909d8759f0f9.png)
 
     - CHAR(n)
 
@@ -211,13 +211,13 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
 
       
 
-    <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220107204053999.png" alt="image-20220107204053999" style="zoom:67%;" />
+    ![image](https://user-images.githubusercontent.com/71866756/148562756-be4cfd60-c50e-4681-9faa-e8f1644c19f0.png)
 
   - 날짜형 
 
     ex) 2021-12-15 01:02:03
 
-    <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220107204126933.png" alt="image-20220107204126933" style="zoom:67%;" />
+    ![image](https://user-images.githubusercontent.com/71866756/148562811-da7b604c-d098-4904-a90c-f5b1ccafab08.png)
 
     
 
