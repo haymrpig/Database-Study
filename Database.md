@@ -655,9 +655,442 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
     FROM mypokemon;
     ```
 
+
+
+
+- **데이터 그룹화하기**
+
+  - GROUP BY
+
+    ```mysql
+    SELECT type
+    FROM pokemon.mypokemon
+    GROUP BY type;			# 같은 타입끼리 묶여서, 나눠진 타입으로 표가 만들어진다.
+    ```
+
     
 
+  - HAVING
 
+    ```mysql
+    SELECT type,name
+    FROM pokemon.mypokemon
+    WHERE type='normal'					# row에 걸리는 조건
+    GROUP BY type
+    HAVING name LIKE '%u';				# column에 걸리는 조건
+    ```
+
+    
+
+  - COUNT
+
+    ```mysql
+    SELECT type,name,COUNT(*)			# COUNT(*)는 전체를 의미, 
+    									# COUNT 안에 column명을 넣는다,
+    									# COUNT(1)은 하나의 값을 1로 센다.
+    FROM pokemon.mypokemon
+    WHERE type='normal'					# row에 걸리는 조건
+    GROUP BY type
+    HAVING name LIKE '%u';				# column에 걸리는 조건
+    ```
+
+    
+
+  - SUM
+
+    ```mysql
+    SELECT type,attack,SUM(attack)		# 합을 구한다.
+    FROM pokemon.mypokemon
+    WHERE type='normal'					# row에 걸리는 조건
+    GROUP BY type
+    HAVING attack>0 ;				# column에 걸리는 조건
+    ```
+
+    
+
+  - AVG
+
+    ```mysql
+    SELECT type,COUNT(1),attack,SUM(attack)		# 합을 구한다.
+    FROM pokemon.mypokemon
+    WHERE type='normal'					# row에 걸리는 조건
+    GROUP BY type
+    HAVING COUNT(1)=2 ;					# column에 걸리는 조건
+    ```
+
+  - 실습
+
+    ```mysql
+    DROP DATABASE IF EXISTS pokemon;
+    CREATE DATABASE pokemon;
+    USE pokemon;
+    CREATE TABLE mypokemon (
+    number int,
+    name varchar(20),
+    type varchar(10),
+    height float,
+    weight float
+    );
+    INSERT INTO mypokemon (number, name, type, height, weight)
+    VALUES (10, 'caterpie', 'bug', 0.3, 2.9),
+    (25, 'pikachu', 'electric', 0.4, 6),
+    (26, 'raichu', 'electric', 0.8, 30),
+    (125, 'electabuzz', 'electric', 1.1, 30),
+    (133, 'eevee', 'normal', 0.3, 6.5),
+    (137, 'porygon', 'normal', 0.8, 36.5),
+    (152, 'chikoirita', 'grass', 0.9, 6.4),
+    (153, 'bayleef', 'grass', 1.2, 15.8),
+    (172, 'pichu', 'electric', 0.3, 2),
+    (470, 'leafeon', 'grass', 1, 25.5);
+    
+    SELECT name,type,AVG(weight) 
+    FROM pokemon.mypokemon 
+    WHERE LENGTH(name)>5 
+    GROUP BY type 
+    HAVING AVG(weight)>=20 
+    ORDER BY AVG(weight) DESC;
+    
+    SELECT name,type,MIN(height),MAX(height) 
+    FROM pokemon.mypokemon 
+    WHERE number<200 
+    GROUP BY type 
+    HAVING MAX(weight)>=10 and MIN(weight)>=2 
+    ORDER BY MIN(height) DESC,MAX(height) DESC;
+    
+    ```
+
+- **규칙 만들기**
+
+  - IF
+
+    ```mysql
+    SELECT name, IF(attack>=60,'strong','weak') AS attack_class
+    # 조건식이 참이면 'strong', 거짓이면 'weak' 반환
+    FROM pokemon.mypokemon
+    ```
+
+  - IFNULL
+
+    ```mysql
+    SELECT name, IFNULL(name,'unknwon') AS full_name
+    FROM pokemon.mypokemon;
+    ```
+
+  - CASE
+
+    ```mysql
+    SELECT name,
+    CASE
+    	WHEN attack>=100 THEN 'very strong'
+    	WHEN attack>=60 THEN 'strong'
+    	ELSE 'weak'
+    END AS attack_class
+    FROM pokemon.mypokemon;
+    
+    
+    SELECT name,type
+    CASE type
+    	WHEN 'bug' THEN 'grass'
+    	WHEN 'electric' THEN 'water'	# ELSE 없을 시 NULL 반환
+    END AS rival_type
+    FROM pokemon.mypokemon;
+    
+    ```
+
+  - CREATE FUNCTION, DROP FUNCTION
+
+    ```mysql
+    SET GLOBAL log_bin_trust_function_creators=1;
+    # 사용자 계정에 function create 권한 생성
+    DELIMITER//
+    # 함수의 시작 지정
+    
+    CREATE FUNCTION getAbility(attack INT, defense INT)
+    		RETURNS INT
+    BEGIN
+    		DECLARE a INT;
+    		DECLARE b INT:
+    		DECLARE aility INT;
+    		SET a=attack;
+    		SET b=defense;
+    		SELECT a+b INTO ability;
+    		RETURN ability;
+    END
+    //
+    DELIMITER;
+    # 함수의 끝 지정
+    ```
+
+  - 실습
+
+    ```mysql
+    DROP DATABASE IF EXISTS pokemon;
+    CREATE DATABASE pokemon;
+    USE pokemon;
+    CREATE TABLE mypokemon (
+    number int,
+    name varchar(20),
+    type varchar(10),
+    attack int,
+    defense int
+    );
+    INSERT INTO mypokemon (number, name, type, attack, defense)
+    VALUES (10, 'caterpie', 'bug', 30, 35),
+    (25, 'pikachu', 'electric', 55, 40),
+    (26, 'raichu', 'electric', 90, 55),
+    (125, 'electabuzz', 'electric', 83, 57),
+    (133, 'eevee', 'normal', 55, 50),
+    (137, 'porygon', 'normal', 60, 70),
+    (152, 'chikoirita', 'grass', 49, 65),
+    (153, 'bayleef', 'grass', 62, 80),
+    (172, 'pichu', 'electric', 40, 15),
+    (470, 'leafeon', 'grass', 110, 130);
+    
+    SET GLOBAL log_bin_trust_function_creators=1;
+    DELIMITER //
+    CREATE FUNCTION isStrong(attack INT, defense INT)
+    		RETURNS VARCHAR(20)
+    BEGIN
+    		DECLARE a INT;
+            DECLARE b INT;
+            DECLARE answer VARCHAR(20);
+            SET a = attack;
+            SET b = defense;
+            SELECT CASE
+    				WHEN a+b>120 THEN 'very strong'
+                    WHEN a+b>90 THEN 'strong'
+    				ELSE 'not strong'
+                    END INTO answer;
+    		RETURN answer;
+    END
+    //
+    DELIMITER ;
+    
+    SELECT name, isStrong(attack, defense) AS isStrong
+    FROM mypokemon;
+    ```
+
+    
+
+- **테이블 합치기**
+
+  <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220110223306896.png" alt="image-20220110223306896" style="zoom:67%;" />
+
+  - JOIN
+
+    ```mysql
+    SELECT*
+    FROM mypokemon
+    INNER JOIN ability			
+    ON mypokemon.number=ability.number;
+    # mypokemon, ability 테이블에서 number가 같은 애들만 합침
+    ```
+
+  - LEFT JOIN, RIGHT JOIN
+
+    ```mysql
+    SELECT*
+    FROM mypokemon
+    LEFT JOIN ability			
+    ON mypokemon.number=ability.number;
+    
+    SELECT*
+    FROM mypokemon
+    RIGHT JOIN ability			
+    ON mypokemon.number=ability.number;
+    # 알 수 없는 값들은 NULL로 채워진다.
+    ```
+
+  - OUTER JOIN
+
+    ```mysql
+    #my SQL은 OUTER JOIN이 없어서 LEFT, RIGHT JOIN을 합친다.
+    SELECT*
+    FROM mypokemon
+    LEFT JOIN ability			
+    ON mypokemon.number=ability.number;
+    UNION			# 두 쿼리의 결과를 중복없이 합친다. 
+    SELECT*
+    FROM mypokemon
+    RIGHT JOIN ability			
+    ON mypokemon.number=ability.number;
+    ```
+
+  - CROSS JOIN
+
+    ```mysql
+    SELECT*
+    FROM mypokemon
+    CROSS JOIN ability
+    # 조합 생각하면 쉽다. mypokemon이 3개의 row, ability가 4개의 row라면
+    # 결과는 총 12개의 row로 나온다.
+    ```
+
+  - SELF JOIN
+
+    ```mysql
+    SELECT*
+    FROM mypokemon AS t1
+    INNTER JOIN mypokemon AS t2		
+    ON t1.number=t2.number;
+    # 두 칼럼이 달라도 된다. 
+    ```
+
+  - 실습
+
+    ```mysql
+    DROP DATABASE IF EXISTS pokemon
+    ;
+    
+    CREATE DATABASE pokemon
+    ;
+    
+    USE pokemon
+    ;
+    
+    CREATE TABLE mypokemon
+    (
+    
+    number INT,
+    name VARCHAR(20),
+    type VARCHAR(10)
+    );
+    INSERT INTO mypokemon (number, name, type)
+    VALUES (10, 'caterpie', 'bug'),
+    (25, 'pikachu', 'electric'),
+    (26, 'raichu', 'electric'),
+    (133, 'eevee', 'normal'),
+    (152, 'chikoirita', 'grass');
+    CREATE TABLE ability (
+    number INT,
+    height FLOAT,
+    weight FLOAT,
+    attack INT,
+    defense INT,
+    speed int
+    );
+    INSERT INTO ability (number, height, weight, attack, defense, speed)
+    VALUES (10, 0.3, 2.9, 30, 35, 45),
+    (25, 0.4, 6, 55, 40, 90),
+    (125, 1.1, 30, 83, 57, 105),
+    (133, 0.3, 6.5, 55, 50, 55),
+    (137, 0.8, 36.5, 60, 70, 40),
+    (152, 0.9, 6.4, 49, 65, 45),
+    (153, 1.2, 15.8, 62, 80, 60),
+    (172, 0.3, 2, 40, 15, 60),
+    (470, 1, 25.5, 110, 130, 95);
+    
+    SELECT name, attack, defense
+    FROM mypokemon
+    LEFT JOIN ability
+    ON mypokemon.number = ability.number;
+    
+    SELECT ability.number, name
+    FROM mypokemon
+    RIGHT JOIN ability
+    ON mypokemon.number = ability.number;
+    
+    
+    ```
+
+- **여러 테이블 한번에 다루기**
+
+  - 합집합 (UNION, UNION ALL)
+
+    ```mysql
+    # UNION 중복 제외, UNION ALL 중복 포함 
+    SELECT name
+    FROM mypokemon	# 쿼리 A
+    UNION # UNION ALL
+    SELECT name
+    FROM friendpokemon
+    ORDER BY number;
+    # query A의 칼럼으로만 정렬 가능
+    # UNION의 경우 만약 동일한 이름이지만, 다른 칼럼의 값이 다를 경우, 중복으로 치지 않는다. 
+    
+    ```
+
+  - 교집합
+
+    ```mysql
+    # 교집합을 확인하고 싶은 컬럼 모두 다 기준으로 두고 합쳐야 한다.(단순 INNER JOIN과 차이점)
+    SELECT A.name
+    FROM mypokemon AS A
+    INNER JOIN friendpokemon AS B
+    ON A.name=B.name AND A.number=B.number AND A.type=B.type
+    ```
+
+  - 차집합
+
+    ```mysql
+    SELECT A.name
+    FROM mypokemon AS A
+    LEFT JOIN friendpokemon AS B
+    ON A.name=B.name
+    WHERE B.name IS NULL;
+    # 조건을 걸어줘야 한다. 
+    
+    SELECT A.name
+    FROM mypokemon AS A
+    LEFT JOIN friendpokemon AS B
+    ON A.name=B.name AND A.number=B.number AND A.type=B.type
+    # 비교할 칼럼 나열 가능
+    WHERE B.name IS NULL;
+    ```
+
+  - 실습
+
+    ```mysql
+    DROP DATABASE IF EXISTS pokemon;
+    CREATE DATABASE pokemon;
+    USE pokemon;
+    CREATE TABLE mypokemon (
+    number int,
+    name varchar(20),
+    type varchar(10),
+    attack int,
+    defense int
+    );
+    CREATE TABLE friendpokemon (
+    number int,
+    name varchar(20),
+    type varchar(10),
+    attack int,
+    defense int
+    );
+    INSERT INTO mypokemon (number, name, type, attack, defense)
+    VALUES (10, 'caterpie', 'bug', 30, 35),
+    (25, 'pikachu', 'electric', 55, 40),
+    (26, 'raichu', 'electric', 90, 55),
+    (133, 'eevee', 'normal', 55, 50),
+    (152, 'chikoirita', 'grass', 49, 65);
+    INSERT INTO friendpokemon (number, name, type, attack, defense)
+    VALUES (26, 'raichu', 'electric', 80, 60),
+    (125, 'electabuzz', 'electric', 83, 57),
+    (137, 'porygon', 'normal', 60, 70),
+    (153, 'bayleef', 'grass', 62, 80),
+    (172, 'pichu', 'electric', 40, 15),
+    (470, 'leafeon', 'grass', 110, 130);
+    
+    SELECT distinct type
+    FROM mypokemon
+    UNION
+    SELECT distinct type
+    FROM friendpokemon;
+    # distinct 안 써도 됨
+    
+    SELECT number, name, 'my' AS whose
+    FROM mypokemon
+    WHERE type='grass'
+    UNION ALL
+    SELECT number, name, "friend's" AS whose
+    FROM friendpokemon
+    WHERE type='grass';
+    ```
+
+- **조건에 조건 더하기**
+
+  
 
  
 
