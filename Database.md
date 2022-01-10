@@ -1090,7 +1090,169 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
 
 - **조건에 조건 더하기**
 
-  
+  - 서브 쿼리
 
- 
+    <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220110234213674.png" alt="image-20220110234213674" style="zoom:67%;" />
+
+    ( WHERE절의 연산들 )
+
+    ```mysql
+    # SELECT절
+    SELECT number, name,
+    		(SELECT height FROM ability WHERE number=25) AS height
+    FROM mypokemon
+    WHERE name = 'pikachu';
+    
+    # FROM절
+    SELECT number, height_rank
+    FROM (SELECT number.rank() OVER(ORDER BY height DESC) AS height_rank 		FROM ability) AS A
+    WHERE height_rank=3;
+    
+    # WHERE절
+    SELECT number
+    FROM ability
+    WHERE height<(SELECT AVG(height) FROM ability);
+    
+    SELECT number
+    FROM ability
+    WHERE height<ALL(SELECT attack FROM ability WHERE type='electric');
+    
+    SELECT number
+    FROM ability
+    WHERE defense>ANY(SELECT attack FROM ability WHERE type='electric');
+    
+    SELECT number
+    FROM ability
+    WHERE EXISTS(SELECT * FROM ability WHERE type='bug');
+    # type이 bug가 하나라도 있으면 TRUE라서 테이블의 모든 number값을 가져온다. 
+    ```
+
+  - 실습
+
+    ```mysql
+    DROP DATABASE IF EXISTS pokemon;
+    CREATE DATABASE pokemon;
+    USE pokemon;
+    CREATE TABLE mypokemon (
+    number INT,
+    name VARCHAR(20)
+    );
+    INSERT INTO mypokemon (number, name)
+    VALUES (10, 'caterpie'),
+    (25, 'pikachu'),
+    (26, 'raichu'),
+    (133, 'eevee'),
+    (152, 'chikoirita');
+    CREATE TABLE ability (
+    number INT,
+    type VARCHAR(10),
+    height FLOAT,
+    weight FLOAT,
+    attack INT,
+    defense INT,
+    speed int
+    );
+    INSERT INTO ability (number, type, height, weight, attack, defense, speed)
+    VALUES (10, 'bug', 0.3, 2.9, 30, 35, 45),
+    (25, 'electric', 0.4, 6, 55, 40, 90),
+    (26, 'electric', 0.8, 30, 90, 55, 110),
+    (133, 'normal', 0.3, 6.5, 55, 50, 55),
+    (152, 'grass', 0.9, 6.4, 49, 65, 45);
+    
+    SELECT number
+    FROM ability
+    WHERE weight = (SELECT MAX(weight) FROM ability);
+    
+    SELECT number
+    FROM ability
+    WHERE speed < ANY(SELECT attack FROM ability WHERE type='electric');
+    
+    SELECT name
+    FROM mypokemon
+    WHERE EXISTS(SELECT * FROM ability WHERE attack>defense);
+    ```
+
+- **응용편**
+
+  ```mysql
+  # 데이터 삭제
+  DELETE FROM pokemon.mypokemon
+  WHERE attack>50;
+  
+  # 데이터 수정
+  UPDATE pokemon.mypokemon
+  SET type='normal'
+  WHERE name='chikorita'
+  # 치코리타의 타입을 normal로 바꾼다.
+  ```
+
+  - 제약 조건
+
+    <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220110235910507.png" alt="image-20220110235910507" style="zoom:67%;" />
+
+    ```mysql
+    CREATE TABLE new_mypokemon(
+    			number INT PRIMARY KEY,
+    			name VARCHAR(20) UNIQUE,
+    			type VARCHAR(10) NOT NULL,
+    			attack INT DEFAULT 0,
+    			defense INT DEFAULT 100,
+    			FOREIGN KEY(number) REFERENCES mypokemon(number)
+    );
+    ```
+
+  - 권한과 DCL
+
+    <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220111000243223.png" alt="image-20220111000243223" style="zoom:67%;" />
+
+    ```mysql
+    # MYSQL 기본 데이터베이스인 mysql 데이터베이스 선택
+    USE mysql;
+    # 사용자 목록 조회하기
+    SELECT user, host FROM user;
+    
+    # 사용자 생성하기
+    CREATE USER 사용자 이름@ip주소;
+    # 비밀번호와 함께 사용자 생성하기
+    CREATE USER 사용자 이름@ip주소 IDENTIFIED BY '사용자 비밀번호';
+    # 사용자 삭제하기
+    DROP USER 사용자 이름;
+    
+    # 권한 부여하기
+    GRANT 권한 ON 데이터베이스 이름.테이블 이름 TO 사용자 이름@ip주소
+    # 권한 확인하기
+    SHOW GRANTS FOR 사용자 이름@ip주소;
+    # 권한 삭제하기
+    REVOKE 권한 ON 데이터베이스 이름.테이블 이름 FROM 사용자 이름@ip주소;
+    # 권한 적용하기
+    FLUSH PRIVILEGES;
+    
+    # 예시 : newuser@%에게 mydb.mytb에 대한 모든 권한 부여하기
+    GRANT ALL PRIVILEGES ON mydb.mytb TO newuser@%;
+    # 예시1 : newuser@%에게 모든 데이터베이스, 모든 테이블에 대한 SELECT,INSERT 권한 부여하기
+    GRANT SELECT,INSERT ON *.* TO newuser@%;
+    
+    
+    ```
+
+  -  트랜잭션과 TCL
+
+    ```mysql
+    # 트랜잭션 시작하기
+    START TRANSACTION;
+    # 트랜잭션 확정하기
+    COMMIT;
+    # 트랜잭션 이전으로 돌아가기
+    ROLLBACK;
+    
+    # 세이브포인트 만들기
+    SAVEPOINT 세이브포인트 이름;
+    # 세이브포인트로 돌아가기
+    ROLLBACK TO 세이브포인트 이름;
+    
+    ```
+
+    
+
+
 
