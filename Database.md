@@ -874,7 +874,8 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
 
 - **테이블 합치기**
 
-  <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220110223306896.png" alt="image-20220110223306896" style="zoom:67%;" />
+  ![image](https://user-images.githubusercontent.com/71866756/148790813-a86b20bc-57ac-48d8-8e1f-5680b32af0c8.png)
+  
 
   - JOIN
 
@@ -1092,7 +1093,7 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
 
   - 서브 쿼리
 
-    <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220110234213674.png" alt="image-20220110234213674" style="zoom:67%;" />
+    ![image](https://user-images.githubusercontent.com/71866756/148790933-a1949615-58d3-438d-aa61-9b057f123d34.png)  
 
     ( WHERE절의 연산들 )
 
@@ -1188,7 +1189,7 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
 
   - 제약 조건
 
-    <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220110235910507.png" alt="image-20220110235910507" style="zoom:67%;" />
+    ![image](https://user-images.githubusercontent.com/71866756/148791000-14656174-0403-4b5e-b9d3-302753558a5b.png)
 
     ```mysql
     CREATE TABLE new_mypokemon(
@@ -1203,7 +1204,7 @@ ex) 은행 : 계좌정보, 입출금 내역 등 / 항공사 : 예약정보, 비�
 
   - 권한과 DCL
 
-    <img src="../../../AppData/Roaming/Typora/typora-user-images/image-20220111000243223.png" alt="image-20220111000243223" style="zoom:67%;" />
+    ![image](https://user-images.githubusercontent.com/71866756/148791048-9a5591f1-f732-45ab-8b82-f7f3377cddfe.png)
 
     ```mysql
     # MYSQL 기본 데이터베이스인 mysql 데이터베이스 선택
